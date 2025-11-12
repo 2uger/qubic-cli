@@ -506,9 +506,11 @@ static uint32_t getContractIndex(const char* str)
         idx = 16;
     else if (strcasecmp(str, "QBOND") == 0)
         idx = 17;
+    else if (strcasecmp(str, "QLOAN") == 0)
+        idx = 18;
     else
     {
-        constexpr uint32_t contractCount = 17;
+        constexpr uint32_t contractCount = 18;
         if (sscanf(str, "%u", &idx) != 1 || idx == 0 || idx > contractCount)
         {
             LOG("Contract \"%s\" is unknown!\n", str);
@@ -2510,6 +2512,109 @@ void parseArgument(int argc, char** argv)
         {
             g_cmd = QBOND_GET_CFA_CMD;
             i++;
+            CHECK_OVER_PARAMETERS
+            return;
+        }
+        if (strcmp(argv[i], "-qloanplaceloanreq") == 0)
+        {
+            CHECK_NUMBER_OF_PARAMETERS(13);
+            g_cmd = QLOAN_PLACE_LOAN_REQUEST_CMD;
+            g_qloan_assetIssuer[0] = argv[i + 1];
+            g_qloan_assetName[0] = argv[i + 2];
+            g_qloan_loanAssetAmount[0] = (uint64_t)charToNumber(argv[i + 3]);
+            g_qloan_assetIssuer[1] = argv[i + 4];
+            g_qloan_assetName[1] = argv[i + 5];
+            g_qloan_loanAssetAmount[1] = (uint64_t)charToNumber(argv[i + 6]);
+            g_qloan_isRequest = (bool)charToNumber(argv[i + 7]);
+            g_qloan_privateId = argv[i + 8];
+            g_qloan_loanAssetsNum = (uint8_t)charToNumber(argv[i + 9]);
+            g_qloan_loanPrice = (uint64_t)charToNumber(argv[i + 10]);
+            g_qloan_loanInterestRate = (uint64_t)charToNumber(argv[i + 11]);
+            g_qloan_loanReturnPeriodInEpochs = (uint64_t)charToNumber(argv[i + 12]);
+            g_qloan_assetsToCreditor = (bool)charToNumber(argv[i + 13]);
+            i += 14;
+            CHECK_OVER_PARAMETERS
+            return;
+        }
+        if (strcmp(argv[i], "-qloanacceptloanreq") == 0)
+        {
+            CHECK_NUMBER_OF_PARAMETERS(1);
+            g_cmd = QLOAN_ACCEPT_LOAN_REQUEST_CMD;
+            g_qloan_acceptLoanReqId = (uint64_t)charToNumber(argv[i + 1]);
+            i += 2;
+            CHECK_OVER_PARAMETERS
+            return;
+        }
+        if (strcmp(argv[i], "-qloanremoveloanreq") == 0)
+        {
+            CHECK_NUMBER_OF_PARAMETERS(1);
+            g_cmd = QLOAN_REMOVE_LOAN_REQUEST_CMD;
+            g_qloan_removeLoanReqIdx = (uint64_t)charToNumber(argv[i + 1]);
+            i += 2;
+            CHECK_OVER_PARAMETERS
+            return;
+        }
+        if (strcmp(argv[i], "-qloanreleaseasset") == 0)
+        {
+            CHECK_NUMBER_OF_PARAMETERS(4);
+            g_cmd = QLOAN_RELEASE_ASSET_CMD;
+            g_qloan_releaseAssetIssuer = argv[i + 1];
+            g_qloan_releaseAssetName = argv[i + 2];
+            g_qloan_toReleaseAmount = charToNumber(argv[i + 3]);
+            g_qloan_dstManagingContractIdx = charToNumber(argv[i + 4]);
+            i += 5;
+            CHECK_OVER_PARAMETERS
+            return;
+        }
+        if (strcmp(argv[i], "-qloanpayloandebt") == 0)
+        {
+            CHECK_NUMBER_OF_PARAMETERS(1);
+            g_cmd = QLOAN_PAY_LOAN_DEBT_CMD;
+            g_qloan_payDebtLoanId = (uint64_t)charToNumber(argv[i + 1]);
+            i += 2;
+            CHECK_OVER_PARAMETERS
+            return;
+        }
+        if (strcmp(argv[i], "-qloangetallloanreqs") == 0)
+        {
+            CHECK_NUMBER_OF_PARAMETERS(0);
+            g_cmd = QLOAN_GET_ALL_LOAN_REQUESTS_CMD;;
+            i += 1;
+            CHECK_OVER_PARAMETERS
+            return;
+        }
+        if (strcmp(argv[i], "-qloangetuseractiveloanreqs") == 0)
+        {
+            CHECK_NUMBER_OF_PARAMETERS(1);
+            g_cmd = QLOAN_GET_USER_ACTIVE_LOAN_REQUESTS_CMD;;
+            g_qloan_ownerIdentity = argv[i + 1];
+            i += 2;
+            CHECK_OVER_PARAMETERS
+            return;
+        }
+        if (strcmp(argv[i], "-qloangetuseracceptedloanreqs") == 0)
+        {
+            CHECK_NUMBER_OF_PARAMETERS(1);
+            g_cmd = QLOAN_GET_ACCEPTED_LOAN_REQUESTS_CMD;;
+            g_qloan_ownerIdentity = argv[i + 1];
+            i += 2;
+            CHECK_OVER_PARAMETERS
+            return;
+        }
+        if (strcmp(argv[i], "-qloangetfees") == 0)
+        {
+            CHECK_NUMBER_OF_PARAMETERS(0);
+            g_cmd = QLOAN_GET_FEES_CMD;
+            i += 1;
+            CHECK_OVER_PARAMETERS
+            return;
+        }
+        if (strcmp(argv[i], "-qloangetuserdebt") == 0)
+        {
+            CHECK_NUMBER_OF_PARAMETERS(0);
+            g_cmd = QLOAN_GET_USER_DEBT_CMD;;
+            g_qloan_ownerIdentity = argv[i + 1];
+            i += 2;
             CHECK_OVER_PARAMETERS
             return;
         }

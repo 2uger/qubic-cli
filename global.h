@@ -247,3 +247,28 @@ int64_t g_qbond_mbondPrice = 0;
 int64_t g_qbond_burnAmount = 0;
 char* g_qbond_owner = nullptr;
 bool g_qbond_updateCFAOperation = false;
+
+// qloan
+char* g_qloan_assetIssuer[2] = {nullptr, nullptr};
+char* g_qloan_assetName[2] = {nullptr, nullptr};
+uint64_t g_qloan_loanAssetAmount[2] = {0, 0};
+char* g_qloan_privateId = nullptr;
+bool g_qloan_isRequest = false;
+uint8_t g_qloan_loanAssetsNum = 0;
+uint64_t g_qloan_loanPrice = 0;
+uint64_t g_qloan_loanInterestRate = 0;
+uint64_t g_qloan_loanReturnPeriodInEpochs = 0;
+bool g_qloan_assetsToCreditor = false;
+
+uint64_t g_qloan_removeLoanReqIdx = 0;
+
+uint64_t g_qloan_acceptLoanReqId = 0;
+
+uint64_t g_qloan_payDebtLoanId = 0;
+
+char* g_qloan_releaseAssetIssuer = nullptr;
+char* g_qloan_releaseAssetName = nullptr;
+uint64_t g_qloan_toReleaseAmount = 0;
+uint16_t g_qloan_dstManagingContractIdx = 0;
+
+char* g_qloan_ownerIdentity = nullptr;

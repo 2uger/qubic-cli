@@ -28,6 +28,7 @@
 #include "nostromo.h"
 #include "qutil.h"
 #include "qbond.h"
+#include "qloan.h"
 
 #define DEFAULT_TIMEOUT_MSEC 1000
 
@@ -386,6 +387,13 @@ template GetUserMBonds_output QubicConnection::receivePacketWithHeaderAs<GetUser
 template GetFees_output QubicConnection::receivePacketWithHeaderAs<GetFees_output>();
 template GetEarnedFees_output QubicConnection::receivePacketWithHeaderAs<GetEarnedFees_output>();
 template GetCFA_output QubicConnection::receivePacketWithHeaderAs<GetCFA_output>();
+
+// QLOAN
+template getAllLoanReqs_output QubicConnection::receivePacketWithHeaderAs<getAllLoanReqs_output>();
+template getUserActiveLoanReqs_output QubicConnection::receivePacketWithHeaderAs<getUserActiveLoanReqs_output>();
+template getUserAcceptedLoanReqs_output QubicConnection::receivePacketWithHeaderAs<getUserAcceptedLoanReqs_output>();
+template getFeesInfo_output QubicConnection::receivePacketWithHeaderAs<getFeesInfo_output>();
+template getUserDebt_output QubicConnection::receivePacketWithHeaderAs<getUserDebt_output>();
 
 // TESTING
 template QpiFunctionsOutput QubicConnection::receivePacketWithHeaderAs<QpiFunctionsOutput>();

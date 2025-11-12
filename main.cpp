@@ -21,6 +21,7 @@
 #include "test_utils.h"
 #include "nostromo.h"
 #include "qbond.h"
+#include "qloan.h"
 
 int run(int argc, char* argv[])
 {
@@ -1233,6 +1234,73 @@ int run(int argc, char* argv[])
         {
             sanityCheckNode(g_nodeIp, g_nodePort);
             qbondGetCFA(g_nodeIp, g_nodePort);
+            break;
+        }
+        case QLOAN_PLACE_LOAN_REQUEST_CMD:
+        {
+            sanityCheckNode(g_nodeIp, g_nodePort);
+            qloanPlaceLoanReq(g_nodeIp, g_nodePort, g_seed,
+                              g_qloan_assetIssuer, g_qloan_assetName,
+                              g_qloan_loanAssetAmount, g_qloan_privateId, g_qloan_isRequest,
+                              g_qloan_loanAssetsNum, g_qloan_loanPrice, g_qloan_loanInterestRate,
+                              g_qloan_loanReturnPeriodInEpochs, g_offsetScheduledTick, g_qloan_assetsToCreditor);
+            break;
+        }
+        case QLOAN_REMOVE_LOAN_REQUEST_CMD:
+        {
+            sanityCheckNode(g_nodeIp, g_nodePort);
+            qloanRemoveLoanReq(g_nodeIp, g_nodePort, g_seed, g_qloan_removeLoanReqIdx, g_offsetScheduledTick);
+            break;
+        }
+        case QLOAN_ACCEPT_LOAN_REQUEST_CMD:
+        {
+            sanityCheckNode(g_nodeIp, g_nodePort);
+            qloanAcceptLoanReq(g_nodeIp, g_nodePort, g_seed, g_qloan_acceptLoanReqId, g_offsetScheduledTick);
+            break;
+        }
+        case QLOAN_RELEASE_ASSET_CMD:
+        {
+            sanityCheckNode(g_nodeIp, g_nodePort);
+            qloanReleaseAsset(g_nodeIp, g_nodePort, g_seed,
+                              g_qloan_releaseAssetIssuer, g_qloan_releaseAssetName,
+                              g_qloan_toReleaseAmount, g_qloan_dstManagingContractIdx, g_offsetScheduledTick);
+            break;
+        }
+        case QLOAN_PAY_LOAN_DEBT_CMD:
+        {
+            sanityCheckNode(g_nodeIp, g_nodePort);
+            qloanPayLoanDebt(g_nodeIp, g_nodePort, g_seed,
+                             g_qloan_payDebtLoanId, g_offsetScheduledTick);
+            break;
+        }
+        case QLOAN_GET_ALL_LOAN_REQUESTS_CMD:
+        {
+            sanityCheckNode(g_nodeIp, g_nodePort);
+            qloanGetAllLoanReqs(g_nodeIp, g_nodePort);
+            break;
+        }
+        case QLOAN_GET_USER_ACTIVE_LOAN_REQUESTS_CMD:
+        {
+            sanityCheckNode(g_nodeIp, g_nodePort);
+            qloanGetUserActiveLoanReqs(g_nodeIp, g_nodePort, g_qloan_ownerIdentity);
+            break;
+        }
+        case QLOAN_GET_ACCEPTED_LOAN_REQUESTS_CMD:
+        {
+            sanityCheckNode(g_nodeIp, g_nodePort);
+            qloanGetUserAcceptedLoanReqs(g_nodeIp, g_nodePort, g_qloan_ownerIdentity);
+            break;
+        }
+        case QLOAN_GET_FEES_CMD:
+        {
+            sanityCheckNode(g_nodeIp, g_nodePort);
+            qloanGetFees(g_nodeIp, g_nodePort);
+            break;
+        }
+        case QLOAN_GET_USER_DEBT_CMD:
+        {
+            sanityCheckNode(g_nodeIp, g_nodePort);
+            qloanGetUserDebt(g_nodeIp, g_nodePort, g_qloan_ownerIdentity);
             break;
         }
         case TEST_QPI_FUNCTIONS_OUTPUT:

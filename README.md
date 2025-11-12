@@ -377,6 +377,28 @@ Command:
 	-qbondgetcfa
 			Get list of commission free addresses.
 
+[QLOAN COMMANDS]
+    -qloanplaceloanreq <ASSET_ISSUER1> <ASSET_NAME1> <ASSET_AMOUNT1> <ASSET_ISSUER2> <ASSET_NAME2> <ASSET_AMOUNT2> <IS_LOAN_REQ> <PRIVATE> <ASSETS_NUM> <PRICE> <INTEREST_RATE> <RETURN_PERIOD_IN_EPOCHS> <TRANSFER_ASSETS_TO_CREDITOR>
+            Create loan/credit request
+    -qloanacceptloanreq <LOAN_REQ_ID>
+            Accept loan request(make sure transfer assets rights to the QLoan sc)
+    -qloanremoveloanreq <LOAN_REQ_ID>
+            Remove loan request if possible(not accepted yet)
+    -qloanreleaseasset <ASSET_ISSUER> <ASSET_NAME> <RELEASE_AMOUNT> <DST_MANAGING_SC_IDX>
+            Release assets to the new sc
+    -qloanpayloandebt <LOAN_REQ_ID>
+            Pay loan debt
+    -qloangetallloanreqs
+            Receive list of all loan requests(except private ones)
+    -qloangetuseractiveloanreqs <USER_ID>
+            Receive list of all user's loan requests
+    -qloangetuseracceptedloanreqs <USER_ID>
+            Receive list of all user's accepted requests
+    -qloangetfees
+            Receive list of all fees and some debug information
+    -qloangetuserdebt
+            Receive user's debt
+ 
 [TESTING COMMANDS]
 	-testqpifunctionsoutput
 		Test that output of qpi functions matches TickData and quorum tick votes for 15 ticks in the future (as specified by scheduletick offset). Requires the TESTEXA SC to be enabled.
