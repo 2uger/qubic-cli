@@ -7,6 +7,7 @@
 #include "key_utils.h"
 #include "k12_and_key_utils.h"
 
+#include <algorithm>
 #include <map>
 #include <string>
 
@@ -490,44 +491,48 @@ static void logLoanReqs(T& t)
         {LoanReqState::EXPIRED, "EXPIRED"},
     };
 
+    std::vector<LoanReq> loan_reqs;
+    loan_reqs.insert(loan_reqs.end(), t.loanReqs, t.loanReqs + t.loanReqsAmount);
+    std::sort(loan_reqs.begin(), loan_reqs.end(), [](LoanReq& f, LoanReq& s) {return f.reqId < s.reqId;});
+
     LOG("Loan reqs amount: %ld\n", t.loanReqsAmount);
-    for (unsigned int i = 0; i < t.loanReqsAmount; i++)
+    for (auto& loan_req : loan_reqs)
     {
         char borrowerId[60];
         char creditorId[60];
         char acceptedById[60];
         char privateId[60];
-        getIdentityFromPublicKey(t.loanReqs[i].borrowerId, borrowerId, false);
-        getIdentityFromPublicKey(t.loanReqs[i].creditorId, creditorId, false);
-        getIdentityFromPublicKey(t.loanReqs[i].acceptedById, acceptedById, false);
-        getIdentityFromPublicKey(t.loanReqs[i].privateId, privateId, false);
+        getIdentityFromPublicKey(loan_req.borrowerId, borrowerId, false);
+        getIdentityFromPublicKey(loan_req.creditorId, creditorId, false);
+        getIdentityFromPublicKey(loan_req.acceptedById, acceptedById, false);
+        getIdentityFromPublicKey(loan_req.privateId, privateId, false);
 
         LOG("Borrower: %.60s\nCreditor: %.60s\nAcceptedBy: %.60s\nPrivateId: %.60s\nLoan id: %ld\n",
             borrowerId, 
             creditorId,
             acceptedById,
             privateId,
-            t.loanReqs[i].reqId);
+            loan_req.reqId);
 
-        LOG("Assets amount: %d\n", t.loanReqs[i].assetsNum);
+        LOG("Assets amount: %d\n", loan_req.assetsNum);
         LOG("price amount: %ld, interest rate: %ld, debt amount: %ld, return period in epochs: %ld, epochs left: %ld, state: %s\n",
-            t.loanReqs[i].priceAmount,
-            t.loanReqs[i].interestRate,
-            t.loanReqs[i].debtAmount,
-            t.loanReqs[i].returnPeriodInEpochs,
-            t.loanReqs[i].epochsLeft,
-            loanReqStateDescr.at(t.loanReqs[i].state).c_str());
-        for (unsigned int j = 0; j < t.loanReqs[i].assetsNum; j++)
+            loan_req.priceAmount,
+            loan_req.interestRate,
+            loan_req.debtAmount,
+            loan_req.returnPeriodInEpochs,
+            loan_req.epochsLeft,
+            loanReqStateDescr.at(loan_req.state).c_str());
+        for (unsigned int j = 0; j < loan_req.assetsNum; j++)
         {
             char assetName[8];
             char assetIssuer[60];
 
-            memcpy(assetName, &t.loanReqs[i].assets[j].assetName, 8);
-            getIdentityFromPublicKey(t.loanReqs[i].assets[j].assetIssuer, assetIssuer, false);
+            memcpy(assetName, &loan_req.assets[j].assetName, 8);
+            getIdentityFromPublicKey(loan_req.assets[j].assetIssuer, assetIssuer, false);
             LOG("name: %0.8s\nasset issuer: %.60s\nasset amount: %ld\n",
                 assetName,
                 assetIssuer,
-                t.loanReqs[i].assetAmount[j]);
+                loan_req.assetAmount[j]);
         }
         LOG("\n");
     }
