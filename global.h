@@ -263,8 +263,10 @@ bool g_qloan_assetsToCreditor = false;
 uint64_t g_qloan_removeLoanReqIdx = 0;
 
 uint64_t g_qloan_acceptLoanReqId = 0;
+uint64_t g_qloan_price = 0;
 
 uint64_t g_qloan_payDebtLoanId = 0;
+uint64_t g_qloan_debtPrice = 0;
 
 char* g_qloan_releaseAssetIssuer = nullptr;
 char* g_qloan_releaseAssetName = nullptr;

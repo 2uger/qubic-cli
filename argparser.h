@@ -2538,10 +2538,11 @@ void parseArgument(int argc, char** argv)
         }
         if (strcmp(argv[i], "-qloanacceptloanreq") == 0)
         {
-            CHECK_NUMBER_OF_PARAMETERS(1);
+            CHECK_NUMBER_OF_PARAMETERS(2);
             g_cmd = QLOAN_ACCEPT_LOAN_REQUEST_CMD;
             g_qloan_acceptLoanReqId = (uint64_t)charToNumber(argv[i + 1]);
-            i += 2;
+            g_qloan_price = (uint64_t)charToNumber(argv[i + 2]);
+            i += 3;
             CHECK_OVER_PARAMETERS
             return;
         }
@@ -2568,10 +2569,11 @@ void parseArgument(int argc, char** argv)
         }
         if (strcmp(argv[i], "-qloanpayloandebt") == 0)
         {
-            CHECK_NUMBER_OF_PARAMETERS(1);
+            CHECK_NUMBER_OF_PARAMETERS(2);
             g_cmd = QLOAN_PAY_LOAN_DEBT_CMD;
             g_qloan_payDebtLoanId = (uint64_t)charToNumber(argv[i + 1]);
-            i += 2;
+            g_qloan_debtPrice = (uint64_t)charToNumber(argv[i + 2]);
+            i += 3;
             CHECK_OVER_PARAMETERS
             return;
         }
@@ -2611,7 +2613,7 @@ void parseArgument(int argc, char** argv)
         }
         if (strcmp(argv[i], "-qloangetuserdebt") == 0)
         {
-            CHECK_NUMBER_OF_PARAMETERS(0);
+            CHECK_NUMBER_OF_PARAMETERS(1);
             g_cmd = QLOAN_GET_USER_DEBT_CMD;;
             g_qloan_ownerIdentity = argv[i + 1];
             i += 2;

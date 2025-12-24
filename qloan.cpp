@@ -106,7 +106,13 @@ void qloanPlaceLoanReq(const char* nodeIp, int nodePort,
     memset(&packet, 0, sizeof(packet));
     memcpy(packet.transaction.sourcePublicKey, sourcePublicKey, 32);
     memcpy(packet.transaction.destinationPublicKey, destPublicKey, 32);
+    // 3000 is the minimum FEE in both cases
     packet.transaction.amount = 3000;
+    // When we want to place credit - add price of the credit
+    if (isRequest == false)
+    {
+        packet.transaction.amount += loanPrice;
+    }
     uint32_t currentTick = getTickNumberFromNode(qc);
     packet.transaction.tick = currentTick + scheduledTickOffset;
     packet.transaction.inputType = QLOAN_PLACE_LOAN_REQ;
@@ -145,6 +151,7 @@ void qloanPlaceLoanReq(const char* nodeIp, int nodePort,
 void qloanAcceptLoanReq(const char* nodeIp, int nodePort,
                         const char* seed,
                         const uint64_t loanReqId,
+                        const uint64_t loanPrice,
                         const uint32_t scheduledTickOffset)
 {
     acceptLoanReq_input input;
@@ -189,7 +196,7 @@ void qloanAcceptLoanReq(const char* nodeIp, int nodePort,
     memset(&packet, 0, sizeof(packet));
     memcpy(packet.transaction.sourcePublicKey, sourcePublicKey, 32);
     memcpy(packet.transaction.destinationPublicKey, destPublicKey, 32);
-    packet.transaction.amount = 1000;
+    packet.transaction.amount = loanPrice;
     uint32_t currentTick = getTickNumberFromNode(qc);
     packet.transaction.tick = currentTick + scheduledTickOffset;
     packet.transaction.inputType = QLOAN_ACCEPT_LOAN_REQ;
@@ -311,6 +318,7 @@ void qloanRemoveLoanReq(const char* nodeIp, int nodePort,
 void qloanPayLoanDebt(const char* nodeIp, int nodePort,
                       const char* seed,
                       const uint64_t loanReqId,
+                      const uint64_t loanPrice,
                       const uint32_t scheduledTickOffset)
 {
     payLoanDebt_input input;
@@ -355,7 +363,7 @@ void qloanPayLoanDebt(const char* nodeIp, int nodePort,
     memset(&packet, 0, sizeof(packet));
     memcpy(packet.transaction.sourcePublicKey, sourcePublicKey, 32);
     memcpy(packet.transaction.destinationPublicKey, destPublicKey, 32);
-    packet.transaction.amount = 100;
+    packet.transaction.amount = loanPrice;
     uint32_t currentTick = getTickNumberFromNode(qc);
     packet.transaction.tick = currentTick + scheduledTickOffset;
     packet.transaction.inputType = QLOAN_PAY_DEBT;
@@ -491,48 +499,48 @@ static void logLoanReqs(T& t)
         {LoanReqState::EXPIRED, "EXPIRED"},
     };
 
-    std::vector<LoanReq> loan_reqs;
-    loan_reqs.insert(loan_reqs.end(), t.loanReqs, t.loanReqs + t.loanReqsAmount);
-    std::sort(loan_reqs.begin(), loan_reqs.end(), [](LoanReq& f, LoanReq& s) {return f.reqId < s.reqId;});
+    std::vector<LoanReq> loanReqs;
+    loanReqs.insert(loanReqs.end(), t.loanReqs, t.loanReqs + t.loanReqsAmount);
+    std::sort(loanReqs.begin(), loanReqs.end(), [](LoanReq& f, LoanReq& s) {return f.reqId < s.reqId;});
 
     LOG("Loan reqs amount: %ld\n", t.loanReqsAmount);
-    for (auto& loan_req : loan_reqs)
+    for (auto& loanReq : loanReqs)
     {
         char borrowerId[60];
         char creditorId[60];
         char acceptedById[60];
         char privateId[60];
-        getIdentityFromPublicKey(loan_req.borrowerId, borrowerId, false);
-        getIdentityFromPublicKey(loan_req.creditorId, creditorId, false);
-        getIdentityFromPublicKey(loan_req.acceptedById, acceptedById, false);
-        getIdentityFromPublicKey(loan_req.privateId, privateId, false);
+        getIdentityFromPublicKey(loanReq.borrowerId, borrowerId, false);
+        getIdentityFromPublicKey(loanReq.creditorId, creditorId, false);
+        getIdentityFromPublicKey(loanReq.acceptedById, acceptedById, false);
+        getIdentityFromPublicKey(loanReq.privateId, privateId, false);
 
         LOG("Borrower: %.60s\nCreditor: %.60s\nAcceptedBy: %.60s\nPrivateId: %.60s\nLoan id: %ld\n",
             borrowerId, 
             creditorId,
             acceptedById,
             privateId,
-            loan_req.reqId);
+            loanReq.reqId);
 
-        LOG("Assets amount: %d\n", loan_req.assetsNum);
+        LOG("Assets amount: %d\n", loanReq.assetsNum);
         LOG("price amount: %ld, interest rate: %ld, debt amount: %ld, return period in epochs: %ld, epochs left: %ld, state: %s\n",
-            loan_req.priceAmount,
-            loan_req.interestRate,
-            loan_req.debtAmount,
-            loan_req.returnPeriodInEpochs,
-            loan_req.epochsLeft,
-            loanReqStateDescr.at(loan_req.state).c_str());
-        for (unsigned int j = 0; j < loan_req.assetsNum; j++)
+            loanReq.priceAmount,
+            loanReq.interestRate,
+            loanReq.debtAmount,
+            loanReq.returnPeriodInEpochs,
+            loanReq.epochsLeft,
+            loanReqStateDescr.at(loanReq.state).c_str());
+        for (unsigned int j = 0; j < loanReq.assetsNum; j++)
         {
             char assetName[8];
             char assetIssuer[60];
 
-            memcpy(assetName, &loan_req.assets[j].assetName, 8);
-            getIdentityFromPublicKey(loan_req.assets[j].assetIssuer, assetIssuer, false);
+            memcpy(assetName, &loanReq.assets[j].assetName, 8);
+            getIdentityFromPublicKey(loanReq.assets[j].assetIssuer, assetIssuer, false);
             LOG("name: %0.8s\nasset issuer: %.60s\nasset amount: %ld\n",
                 assetName,
                 assetIssuer,
-                loan_req.assetAmount[j]);
+                loanReq.assetAmount[j]);
         }
         LOG("\n");
     }

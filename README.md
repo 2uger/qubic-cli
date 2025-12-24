@@ -380,8 +380,8 @@ Command:
 [QLOAN COMMANDS]
     -qloanplaceloanreq <ASSET_ISSUER1> <ASSET_NAME1> <ASSET_AMOUNT1> <ASSET_ISSUER2> <ASSET_NAME2> <ASSET_AMOUNT2> <IS_LOAN_REQ> <PRIVATE> <ASSETS_NUM> <PRICE> <INTEREST_RATE> <RETURN_PERIOD_IN_EPOCHS> <TRANSFER_ASSETS_TO_CREDITOR>
             Create loan/credit request
-    -qloanacceptloanreq <LOAN_REQ_ID>
-            Accept loan request(make sure transfer assets rights to the QLoan sc)
+    -qloanacceptloanreq <LOAN_REQ_ID> <LOAN_PRICE>
+            Accept loan request(make sure transfer assets rights to the QLoan sc), by sending the right amount of money(only for accepting loan requests)
     -qloanremoveloanreq <LOAN_REQ_ID>
             Remove loan request if possible(not accepted yet)
     -qloanreleaseasset <ASSET_ISSUER> <ASSET_NAME> <RELEASE_AMOUNT> <DST_MANAGING_SC_IDX>
@@ -396,7 +396,7 @@ Command:
             Receive list of all user's accepted requests
     -qloangetfees
             Receive list of all fees and some debug information
-    -qloangetuserdebt
+    -qloangetuserdebt <USER_ID>
             Receive user's debt
  
 [TESTING COMMANDS]

@@ -1255,7 +1255,7 @@ int run(int argc, char* argv[])
         case QLOAN_ACCEPT_LOAN_REQUEST_CMD:
         {
             sanityCheckNode(g_nodeIp, g_nodePort);
-            qloanAcceptLoanReq(g_nodeIp, g_nodePort, g_seed, g_qloan_acceptLoanReqId, g_offsetScheduledTick);
+            qloanAcceptLoanReq(g_nodeIp, g_nodePort, g_seed, g_qloan_acceptLoanReqId, g_qloan_price, g_offsetScheduledTick);
             break;
         }
         case QLOAN_RELEASE_ASSET_CMD:
@@ -1270,7 +1270,7 @@ int run(int argc, char* argv[])
         {
             sanityCheckNode(g_nodeIp, g_nodePort);
             qloanPayLoanDebt(g_nodeIp, g_nodePort, g_seed,
-                             g_qloan_payDebtLoanId, g_offsetScheduledTick);
+                             g_qloan_payDebtLoanId, g_qloan_debtPrice, g_offsetScheduledTick);
             break;
         }
         case QLOAN_GET_ALL_LOAN_REQUESTS_CMD:

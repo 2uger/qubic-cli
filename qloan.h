@@ -181,6 +181,7 @@ void qloanPlaceLoanReq(const char* nodeIp, int nodePort,
 void qloanAcceptLoanReq(const char* nodeIp, int nodePort,
                         const char* seed,
                         const uint64_t loanReqId,
+                        const uint64_t loanPrice,
                         const uint32_t scheduledTickOffset);
 void qloanRemoveLoanReq(const char* nodeIp, int nodePort,
                         const char* seed,
@@ -196,6 +197,7 @@ void qloanReleaseAsset(const char* nodeIp, int nodePort,
 void qloanPayLoanDebt(const char* nodeIp, int nodePort,
                       const char* seed,
                       const uint64_t loanReqId,
+                      const uint64_t loanPrice,
                       const uint32_t scheduledTickOffset);
 
 void qloanGetAllLoanReqs(const char* nodeIp, int nodePort);
